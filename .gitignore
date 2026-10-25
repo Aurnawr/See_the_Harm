@@ -1,0 +1,8 @@
+.venv/
+.hf_cache/
+data/
+results/activations/
+results/lowlevel.npz
+logs/
+__pycache__/
+.DS_Store
