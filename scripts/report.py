@@ -63,9 +63,13 @@ def plot_directions(dirs, out):
     plt.close(fig)
 
 
-def criteria(m, dirs):
+def best_layer(m):
     within = decode(m, prompt_train="A", prompt_eval="A", subset="all", position="last", probe="lr").set_index("layer")
-    L = int(within["auroc"].idxmax())
+    return int(within["auroc"].idxmax())
+
+
+def criteria(m, dirs, L):
+    within = decode(m, prompt_train="A", prompt_eval="A", subset="all", position="last", probe="lr").set_index("layer")
     w = within.loc[L]
     vision = decode(m, prompt_train="A", prompt_eval="A", subset="all", position="img", probe="lr").set_index("layer").loc[0, "auroc"]
     # LR permutations only run at a few layers; elsewhere fall back to the DiM null
@@ -93,7 +97,7 @@ def criteria(m, dirs):
          f"DiM {dim:.3f} vs LR {w['auroc']:.3f}; split-half cos {dr['split_half_cos']:.3f}; A vs B cos {dr['cos_dim_A_B']:.3f}",
          abs(dim - w["auroc"]) <= 0.05 and dr["split_half_cos"] >= 0.8 and dr["cos_dim_A_B"] >= 0.8),
     ]
-    return L, rows
+    return rows
 
 
 def main():
@@ -107,9 +111,12 @@ def main():
     plot_curves(m, out)
     plot_directions(dirs, out)
 
-    L, rows = criteria(m, dirs)
+    # L* is always chosen on the pilot stage, so the test split plays no part in picking it
+    pilot = pd.read_csv(os.path.join(args.results, "pilot", "metrics.csv"))
+    L = best_layer(pilot)
+    rows = criteria(m, dirs, L)
     lines = [f"# RQ1 results ({args.stage})", "",
-             f"L* = layer {L} (highest LR AUROC, last token, prompt A).", "",
+             f"L* = layer {L} (highest LR AUROC, last token, prompt A, chosen on the pilot stage).", "",
              "| Criterion | Numbers | Pass |", "|---|---|---|"]
     lines += [f"| {name} | {nums} | {'yes' if ok else 'no'} |" for name, nums, ok in rows]
     loco = decode(m, analysis="loco", position="last", probe="lr")

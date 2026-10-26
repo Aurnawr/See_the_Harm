@@ -83,7 +83,12 @@ resamples of the evaluation images.
 
 ## Decision criteria (review after the pilot, then freeze)
 
-Let L* be the layer with the highest LR test AUROC at the `last` position under prompt A.
+Let L* be the layer with the highest LR AUROC at the `last` position under prompt A, **chosen on
+the pilot stage** so the test split plays no part in picking it. Pilot result: **L* = 14**.
+All layers are still reported.
+
+(Amended after the pilot. The original rule picked L* on the test split, which inflates the
+estimate. No other criterion was changed.)
 
 - **Decodable from the LLM, beyond the vision encoder**: LR AUROC CI lower bound at L* > 0.75,
   above the permutation 95th percentile, and > (vision-encoder baseline AUROC + 0.05).
