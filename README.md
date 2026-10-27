@@ -20,6 +20,21 @@ activations has to come from the image. The full design, controls and pass/fail 
 | Leave-one-category-out | A probe that only works on harm categories it has seen |
 | Permutation null | Chance-level separability in 3584 dimensions |
 
+### Result
+
+**Image harm is linearly decodable (test AUROC about 0.91–0.94), but it is already decodable at
+the vision encoder output (0.906), so the LLM does not create it.** It is not explained by
+low-level image statistics (0.638), the prompt wording, or image topic (unsafe vs topic-matched
+safe 0.892), and it transfers to unseen harm categories (mean 0.900). Pre-registered criteria
+passed: 3 of 5. "Beyond the vision encoder" failed, and "single direction" failed at the
+pre-specified layer 14. Exploratory: a stable single direction appears at the last token from
+about layer 19.
+
+Full write-up: [docs/rq1_conclusion.md](docs/rq1_conclusion.md). Numbers and plots:
+[results/final/](results/final/).
+
+![decodability](results/final/decodability.png)
+
 ## Layout
 
 ```
