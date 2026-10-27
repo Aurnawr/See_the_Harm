@@ -1,0 +1,11 @@
+{
+  "stage": "final",
+  "commit": "5d1e7245cfa06675aa46bce236ab86d370439b58",
+  "uncommitted_changes": false,
+  "seed": 0,
+  "n_boot": 1000,
+  "n_perm_dim": 200,
+  "n_perm_lr": 50,
+  "n_train_pool": 300,
+  "n_eval_pool": 300
+}

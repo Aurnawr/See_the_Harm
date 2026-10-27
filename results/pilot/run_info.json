@@ -1,0 +1,11 @@
+{
+  "stage": "pilot",
+  "commit": "b13be369fc026456415db08477251af696d41034",
+  "uncommitted_changes": false,
+  "seed": 0,
+  "n_boot": 1000,
+  "n_perm_dim": 50,
+  "n_perm_lr": 10,
+  "n_train_pool": 150,
+  "n_eval_pool": 150
+}
